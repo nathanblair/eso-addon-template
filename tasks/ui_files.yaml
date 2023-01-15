@@ -1,0 +1,10 @@
+version: 3
+
+vars:
+  UI_FILES: |
+
+tasks:
+  print:
+    cmds:
+      - cmd: printf "{{.UI_FILES}}"
+        silent: true

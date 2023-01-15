@@ -1,0 +1,10 @@
+version: 3
+
+vars:
+  CUSTOM_RESOURCES: |
+
+tasks:
+  print:
+    cmds:
+      - cmd: printf "{{.CUSTOM_RESOURCES}}"
+        silent: true

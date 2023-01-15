@@ -1,0 +1,29 @@
+version: 3
+
+vars:
+  ADDON_NAME: wombat
+  API_VERSION: 101036
+  SERVER: live
+  DOCUMENTS_DIR: "{{.HOME}}/Documents"
+  TARGET_DIRECTORY_RAW: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns"
+  TARGET_DIRECTORY: "{{fromSlash .TARGET_DIRECTORY_RAW}}"
+
+includes:
+  template:
+    taskfile: "tasks/template.yaml"
+    internal: true
+
+tasks:
+  copy:
+    internal: true
+    cmds:
+      - printf "Copying {{.ROOT_DIR}} to {{.TARGET_DIRECTORY}}\n"
+
+  default:
+    cmds:
+      - task: template:template
+
+  install:
+    cmds:
+      - task: copy
+        silent: true
