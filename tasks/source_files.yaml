@@ -7,5 +7,5 @@ vars:
 tasks:
   print:
     cmds:
-      - cmd: printf "{{.SOURCE_FILES}}"
+      - cmd: printf "{{.SOURCE_FILES}}" >> "{{.ADDON_MANIFEST_PATH}}"
         silent: true

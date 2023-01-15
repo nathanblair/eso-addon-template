@@ -1,5 +1,14 @@
 version: 3
 
+vars:
+  ADDON_MANIFEST_PATH_RAW: "{{.ADDON_DIRECTORY}}/{{.ADDON_NAME}}.txt"
+  ADDON_MANIFEST_PATH: "{{fromSlash .ADDON_MANIFEST_PATH_RAW}}"
+  TEMPLATE: |
+    ## Title: {{.ADDON_NAME}}
+    ## APIVersion: {{.API_VERSION}}
+    ## Author: {{.AUTHOR}}
+    ## Description: {{.DESCRIPTION}}\n
+
 includes:
   src:
     taskfile: "source_files.yaml"
@@ -11,26 +20,19 @@ includes:
     taskfile: "custom_resources.yaml"
     internal: true
 
-vars:
-  ADDON_MANIFEST_PATH: "./{{.ADDON_NAME}}.txt"
-  TEMPLATE: |
-    ## Title: {{.ADDON_NAME}}
-    ## APIVersion: {{.API_VERSION}}\n
-
 tasks:
   print:
     internal: true
     cmds:
-      - cmd: printf "{{.TEMPLATE}}"
+      - cmd: printf "{{.TEMPLATE}}" > "{{.ADDON_MANIFEST_PATH}}"
         silent: true
 
   template:
     desc: Generate the AddOn txt manifest
-    generates:
-      - "{{.ADDON_MANIFEST_PATH}}"
     cmds:
+      - cmd: echo Generating addon manifest at "{{.ADDON_MANIFEST_PATH}}"
+        silent: true
       - task: print
       - task: src:print
       - task: ui:print
       - task: custom:print
-      # - printf "${TEMPLATE}" > "${ADDON_MANIFEST_PATH}"

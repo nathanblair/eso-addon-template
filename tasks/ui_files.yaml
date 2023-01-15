@@ -6,5 +6,5 @@ vars:
 tasks:
   print:
     cmds:
-      - cmd: printf "{{.UI_FILES}}"
+      - cmd: printf "{{.UI_FILES}}" >> "{{.ADDON_MANIFEST_PATH}}"
         silent: true

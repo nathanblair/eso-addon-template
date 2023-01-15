@@ -1,11 +1,17 @@
 version: 3
 
 vars:
-  ADDON_NAME: wombat
+  ADDON_NAME: Wombat
+  AUTHOR: "{{default .USER .USERNAME}}"
+  DESCRIPTION: Flying combat text and alerts
   API_VERSION: 101036
   SERVER: live
   DOCUMENTS_DIR: "{{default .HOME .USERPROFILE}}/Documents"
-  TARGET_DIRECTORY: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns"
+  TARGET_DIRECTORY_RAW: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns/{{.ADDON_NAME}}"
+  TARGET_DIRECTORY: "{{fromSlash .TARGET_DIRECTORY_RAW}}"
+  ADDON_DIRECTORY: "{{fromSlash .ROOT_DIR}}"
+  LN_CMD: '{{if eq OS "windows"}}cmd /C mklink /J{{else}}ln -s{{end}}'
+  RM_RECURSIVE_CMD: '{{if eq OS "windows"}}cmd /C rmdir /S /Q{{else}}rm -r{{end}}'
 
 includes:
   template:
@@ -16,13 +22,22 @@ tasks:
   copy:
     internal: true
     cmds:
-      - echo "Copying {{.ROOT_DIR}} to {{fromSlash .TARGET_DIRECTORY}}"
+      - cmd: echo 'Copying "{{.ADDON_DIRECTORY}}" to "{{.TARGET_DIRECTORY}}"'
+        silent: true
+      - cmd: '{{.LN_CMD}} "{{.TARGET_DIRECTORY}}" "{{.ADDON_DIRECTORY}}"'
 
   default:
     cmds:
       - task: template:template
 
   install:
+    status:
+      - test -d "{{.TARGET_DIRECTORY}}"
     cmds:
       - task: copy
-        silent: true
+
+  uninstall:
+    status:
+      - test ! -d "{{.TARGET_DIRECTORY}}"
+    cmds:
+      - cmd: '{{.RM_RECURSIVE_CMD}} "{{.TARGET_DIRECTORY}}"'
