@@ -4,9 +4,8 @@ vars:
   ADDON_NAME: wombat
   API_VERSION: 101036
   SERVER: live
-  DOCUMENTS_DIR: "{{.HOME}}/Documents"
-  TARGET_DIRECTORY_RAW: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns"
-  TARGET_DIRECTORY: "{{fromSlash .TARGET_DIRECTORY_RAW}}"
+  DOCUMENTS_DIR: "{{default .HOME .USERPROFILE}}/Documents"
+  TARGET_DIRECTORY: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns"
 
 includes:
   template:
@@ -17,7 +16,7 @@ tasks:
   copy:
     internal: true
     cmds:
-      - printf "Copying {{.ROOT_DIR}} to {{.TARGET_DIRECTORY}}\n"
+      - echo "Copying {{.ROOT_DIR}} to {{fromSlash .TARGET_DIRECTORY}}"
 
   default:
     cmds:
