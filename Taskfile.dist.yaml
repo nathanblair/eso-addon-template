@@ -41,3 +41,8 @@ tasks:
       - test ! -d "{{.TARGET_DIRECTORY}}"
     cmds:
       - cmd: '{{.RM_RECURSIVE_CMD}} "{{.TARGET_DIRECTORY}}"'
+
+  show-src-files:
+    silent: true
+    cmds:
+      - echo "{{.SOURCE_FILES}}"

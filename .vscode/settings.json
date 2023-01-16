@@ -1,5 +1,9 @@
 {
     "yaml.schemas": {
         "https://taskfile.dev/schema.json": "tasks/*.yaml"
-    }
+    },
+    "Lua.diagnostics.globals": [
+        "EVENT_MANAGER",
+        "EVENT_ADD_ON_LOADED",
+    ]
 }
