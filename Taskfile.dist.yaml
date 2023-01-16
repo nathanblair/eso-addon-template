@@ -19,30 +19,24 @@ includes:
     internal: true
 
 tasks:
-  copy:
-    internal: true
-    cmds:
-      - cmd: echo 'Copying "{{.ADDON_DIRECTORY}}" to "{{.TARGET_DIRECTORY}}"'
-        silent: true
-      - cmd: '{{.LN_CMD}} "{{.TARGET_DIRECTORY}}" "{{.ADDON_DIRECTORY}}"'
-
   default:
+    desc: Generate the AddOn txt manifest
     cmds:
-      - task: template:template
+      - task: template
 
   install:
+    desc: Install the addon (uses symbolic link)
     status:
       - test -d "{{.TARGET_DIRECTORY}}"
     cmds:
-      - task: copy
+      - cmd: echo 'Copying "{{.ADDON_DIRECTORY}}" to "{{.TARGET_DIRECTORY}}"'
+        silent: true
+      # FIXME #1
+      - cmd: '{{.LN_CMD}} "{{.TARGET_DIRECTORY}}" "{{.ADDON_DIRECTORY}}"'
 
   uninstall:
+    desc: Uninstall the addon
     status:
       - test ! -d "{{.TARGET_DIRECTORY}}"
     cmds:
       - cmd: '{{.RM_RECURSIVE_CMD}} "{{.TARGET_DIRECTORY}}"'
-
-  show-src-files:
-    silent: true
-    cmds:
-      - echo "{{.SOURCE_FILES}}"

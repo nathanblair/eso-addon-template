@@ -1,0 +1,16 @@
+version: 3
+
+vars:
+  ADDON_REGISTER_PATH: "{{.ADDON_DIRECTORY}}/{{.ADDON_NAME}}.lua"
+  REGISTER: "EVENT_MANAGER:RegisterForEvent({{.ADDON_NAME}}.name, EVENT_ADD_ON_LOADED, {{.ADDON_NAME}}.OnAddOnLoaded)"
+
+tasks:
+  register:
+    cmds:
+      - cmd: printf "{{.REGISTER}}" > "{{.ADDON_REGISTER_PATH}}"
+        silent: true
+
+  add-source-to-manifest:
+    cmds:
+      - cmd: printf "{{.ADDON_NAME}}.lua\n" >> "{{.ADDON_MANIFEST_PATH}}"
+        silent: true

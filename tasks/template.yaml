@@ -10,6 +10,9 @@ vars:
     ## Description: {{.DESCRIPTION}}\n
 
 includes:
+  register:
+    taskfile: "register.yaml"
+    internal: true
   src:
     taskfile: "source_files.yaml"
     internal: true
@@ -21,18 +24,21 @@ includes:
     internal: true
 
 tasks:
-  print:
+  template:
     internal: true
     cmds:
       - cmd: printf "{{.TEMPLATE}}" > "{{.ADDON_MANIFEST_PATH}}"
         silent: true
 
-  template:
-    desc: Generate the AddOn txt manifest
+  default:
     cmds:
+      - cmd: echo "Writing register function to {{.ADDON_REGISTER_PATH}}"
+        silent: true
+      - task: register:register
       - cmd: echo Generating addon manifest at "{{.ADDON_MANIFEST_PATH}}"
         silent: true
       - task: print
-      - task: src:print
-      - task: ui:print
-      - task: custom:print
+      - task: register:add-source-to-manifest
+      - task: src
+      - task: ui
+      - task: custom

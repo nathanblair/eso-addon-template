@@ -5,13 +5,12 @@ vars:
   SRC_FILES:
     sh: ls -A "{{.SRC_DIR}}"
   SOURCE_FILES: |-
-    wombat.lua
     {{ range $each_index, $each_file := .SRC_FILES | splitLines -}}
     src/{{ $each_file }}
     {{ end }}
 
 tasks:
-  print:
+  default:
     cmds:
       - cmd: printf "{{.SOURCE_FILES}}" >> "{{.ADDON_MANIFEST_PATH}}"
         silent: true

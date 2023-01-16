@@ -4,7 +4,7 @@ vars:
   CUSTOM_RESOURCES: |
 
 tasks:
-  print:
+  default:
     cmds:
       - cmd: printf "{{.CUSTOM_RESOURCES}}" >> "{{.ADDON_MANIFEST_PATH}}"
         silent: true
