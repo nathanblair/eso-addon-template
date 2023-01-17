@@ -2,13 +2,26 @@ version: 3
 
 vars:
   ADDON_REGISTER_PATH: "{{.ADDON_DIRECTORY}}/{{.ADDON_NAME}}.lua"
-  REGISTER: "EVENT_MANAGER:RegisterForEvent({{.ADDON_NAME}}.name, EVENT_ADD_ON_LOADED, {{.ADDON_NAME}}.OnAddOnLoaded)"
+  REGISTER: |
+    {{.ADDON_NAME}} = {}
+
+    {{.ADDON_NAME}}.name = "{{.ADDON_NAME}}"
+
+    function {{.ADDON_NAME}}.OnAddOnLoaded(_, addonName)
+        if addonName == {{.ADDON_NAME}}.name then
+            {{.ADDON_NAME}}.Initialize()
+            EVENT_MANAGER:UnregisterForEvent({{.ADDON_NAME}}.name, EVENT_ADD_ON_LOADED)
+        end
+    end
+
+    EVENT_MANAGER:RegisterForEvent({{.ADDON_NAME}}.name, EVENT_ADD_ON_LOADED, {{.ADDON_NAME}}.OnAddOnLoaded)
 
 tasks:
-  register:
+  default:
+    silent: true
     cmds:
+      - cmd: echo "Writing register function to {{.ADDON_REGISTER_PATH}}"
       - cmd: printf "{{.REGISTER}}" > "{{.ADDON_REGISTER_PATH}}"
-        silent: true
 
   add-source-to-manifest:
     cmds:

@@ -24,20 +24,15 @@ includes:
     internal: true
 
 tasks:
-  template:
-    internal: true
+  default:
     cmds:
+      - task: register
+
+      - cmd: echo Generating addon manifest at "{{.ADDON_MANIFEST_PATH}}"
+        silent: true
       - cmd: printf "{{.TEMPLATE}}" > "{{.ADDON_MANIFEST_PATH}}"
         silent: true
 
-  default:
-    cmds:
-      - cmd: echo "Writing register function to {{.ADDON_REGISTER_PATH}}"
-        silent: true
-      - task: register:register
-      - cmd: echo Generating addon manifest at "{{.ADDON_MANIFEST_PATH}}"
-        silent: true
-      - task: print
       - task: register:add-source-to-manifest
       - task: src
       - task: ui
