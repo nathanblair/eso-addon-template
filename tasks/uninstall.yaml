@@ -1,0 +1,12 @@
+version: 3
+
+vars:
+  RM_RECURSIVE_CMD: '{{if eq OS "windows"}}cmd /C rmdir /S /Q{{else}}rm -r{{end}}'
+
+tasks:
+  default:
+    desc: Uninstall the addon
+    status:
+      - test ! -d "{{.TARGET_DIRECTORY}}"
+    cmds:
+      - cmd: '{{.RM_RECURSIVE_CMD}} "{{.TARGET_DIRECTORY}}"'

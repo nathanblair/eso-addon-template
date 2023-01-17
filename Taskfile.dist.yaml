@@ -10,33 +10,11 @@ vars:
   TARGET_DIRECTORY_RAW: "{{.DOCUMENTS_DIR}}/Elder Scrolls Online/{{.SERVER}}/AddOns/{{.ADDON_NAME}}"
   TARGET_DIRECTORY: "{{fromSlash .TARGET_DIRECTORY_RAW}}"
   ADDON_DIRECTORY: "{{fromSlash .ROOT_DIR}}"
-  LN_CMD: '{{if eq OS "windows"}}cmd /C mklink /J{{else}}ln -s{{end}}'
-  RM_RECURSIVE_CMD: '{{if eq OS "windows"}}cmd /C rmdir /S /Q{{else}}rm -r{{end}}'
 
 includes:
   template:
     taskfile: "tasks/template.yaml"
-    internal: true
-
-tasks:
-  default:
-    desc: Generate the AddOn txt manifest
-    cmds:
-      - task: template
-
   install:
-    desc: Install the addon (uses symbolic link)
-    status:
-      - test -d "{{.TARGET_DIRECTORY}}"
-    cmds:
-      - cmd: echo 'Copying "{{.ADDON_DIRECTORY}}" to "{{.TARGET_DIRECTORY}}"'
-        silent: true
-      # FIXME #1
-      - cmd: '{{.LN_CMD}} "{{.TARGET_DIRECTORY}}" "{{.ADDON_DIRECTORY}}"'
-
+    taskfile: "tasks/install.yaml"
   uninstall:
-    desc: Uninstall the addon
-    status:
-      - test ! -d "{{.TARGET_DIRECTORY}}"
-    cmds:
-      - cmd: '{{.RM_RECURSIVE_CMD}} "{{.TARGET_DIRECTORY}}"'
+    taskfile: "tasks/uninstall.yaml"

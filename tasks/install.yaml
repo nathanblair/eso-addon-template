@@ -1,0 +1,15 @@
+version: 3
+
+vars:
+  LN_CMD: '{{if eq OS "windows"}}cmd /C mklink /J{{else}}ln -s{{end}}'
+  LN_ORDER: '{{if eq OS "windows"}}"{{.TARGET_DIRECTORY}}" "{{.ADDON_DIRECTORY}}"{{else}}"{{.ADDON_DIRECTORY}}" "{{.TARGET_DIRECTORY}}"{{end}}'
+
+tasks:
+  default:
+    desc: Install the addon (uses symbolic link)
+    status:
+      - test -d "{{.TARGET_DIRECTORY}}"
+    cmds:
+      - cmd: echo 'Copying "{{.ADDON_DIRECTORY}}" to "{{.TARGET_DIRECTORY}}"'
+        silent: true
+      - cmd: "{{.LN_CMD}} {{.LN_ORDER}}"

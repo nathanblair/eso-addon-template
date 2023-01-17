@@ -25,6 +25,7 @@ includes:
 
 tasks:
   default:
+    desc: Generate the add manifest
     cmds:
       - task: register
 
